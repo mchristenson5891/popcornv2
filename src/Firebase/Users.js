@@ -1,5 +1,4 @@
-import { db } from '../Firebase/Firebase'
-import { storage } from '../Firebase/Firebase'
+import { db, FieldValue, storage } from '../Firebase/Firebase'
 
 const userRef = db.collection('users')
 const movieRef = db.collection('movies')
@@ -100,18 +99,28 @@ export const doRemoveFromWatchList = (userId, movieId) =>
 //   const userFriends = await userRef.doc(userId).collection('friends').get().then(snapShot => snapShot.docs.map(m => m.data()))
 // }
 
-export const addMovie = movie =>  {
+export const addMovie = (movie, userId) =>  {
   movieRef
     .where('id', '==', movie.id)
     .get()
-    .then(snapShot => {
-      !snapShot.empty ? console.log(true) : console.log(false)
-      console.log(movie.id, snapShot)
-    }
-      
+    .then(snapShot => 
+      snapShot.empty 
+        ?  doCreateMovie(Object.assign(movie, {watchList: [userId]})) 
+        : doUpdateMovie(snapShot.docs[0].id, userId)
+   
     )
 }
 
+const doCreateMovie = movie =>
+  movieRef
+    .add(movie)
+
+const doUpdateMovie = (movieId, userId) =>
+  movieRef
+    .doc(movieId)
+    .update({
+      watchList: FieldValue.arrayUnion(userId)
+    })
 
 
 // .then(async snapShot => {

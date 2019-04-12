@@ -56,7 +56,7 @@ class Movie extends Component {
     }
     // doAddMovieToWatchList(this.props.currentUser.id, movie)
     //   .then(() => this.setState({buttonLoading: false, isClicked: true}))
-    addMovie(movie)
+    addMovie(movie, this.props.currentUser.id)
   }
 
   removeFromWatchList = () => {

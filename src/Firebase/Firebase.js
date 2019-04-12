@@ -18,12 +18,14 @@ const config = {
   const db = firebase.firestore()
   const auth = firebase.auth()
   const storage = firebase.storage()
+  const FieldValue = firebase.firestore.FieldValue
 
 
   export {
     db,
     auth,
-    storage
+    storage,
+    FieldValue
   }
 
   export default firebase
